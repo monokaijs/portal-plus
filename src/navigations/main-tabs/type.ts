@@ -6,8 +6,8 @@ export interface BottomScreenParams {
 }
 
 export type MainTabsParams = {
-  Feed: BottomScreenParams;
-  Message: BottomScreenParams;
+  Home: BottomScreenParams;
+  Calendar: BottomScreenParams;
   Notification: BottomScreenParams;
   Tool: BottomScreenParams;
   Personal: BottomScreenParams;

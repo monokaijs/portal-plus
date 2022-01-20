@@ -1,43 +1,34 @@
-import React from 'react';
-import {FlatList, View} from 'react-native';
-import {Colors} from '@config/styling';
-import Text from '@components/common/Text';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React from "react";
+import { FlatList, View } from "react-native";
+import Text from "@components/common/Text";
+import Icon from "react-native-vector-icons/Ionicons";
+import { useTheme } from "@react-navigation/native";
 
 interface IDotProps {
   size: any;
 }
 
-const Dot = (props: IDotProps) => {
-  const size = props.size;
-  const style = {
-    width: size,
-    height: size,
-    borderRadius: size,
-    backgroundColor: Colors.primary,
-  };
-  return <View style={style} />;
-};
-
 // @ts-ignore
-const ClassesTimelineItem = ({isFirst, isLast, item, index}) => {
+const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
+  const {colors: Colors} = useTheme();
   const isActive = index === 1;
-  const textColor = isActive ? '#FFFFFF' : Colors.darkText;
+  const textColor = isActive ? "#FFFFFF" : Colors.text;
   return (
     <View
       style={{
-        width: '100%',
-        flexDirection: 'row',
+        width: "100%",
+        flexDirection: "row",
         marginBottom: 16,
-        backgroundColor: isActive ? Colors.primary : 'white',
+        backgroundColor: isActive ? Colors.primary : "white",
         borderRadius: 10,
+        zIndex: 999 - index
       }}>
       <View
         style={{
           flex: 0,
           width: 60,
-          alignItems: 'center',
-          justifyContent: 'center',
+          alignItems: "center",
+          justifyContent: "center",
         }}>
         <View
           style={{
@@ -45,18 +36,18 @@ const ClassesTimelineItem = ({isFirst, isLast, item, index}) => {
             height: 14,
             borderRadius: 10,
             borderWidth: 3,
-            borderColor: isActive ? '#FFFFFF' : Colors.primary,
-            position: 'relative',
+            borderColor: isActive ? "#FFFFFF" : Colors.primary,
+            position: "relative",
           }}>
-          {!isFirst && (
+          {!isLast && (
             <View
               style={{
                 height: 68,
                 borderLeftWidth: 2,
-                borderStyle: 'dashed',
+                borderStyle: "dashed",
                 borderLeftColor: Colors.primary,
                 opacity: 0.5,
-                position: 'absolute',
+                position: "absolute",
                 left: 3,
                 top: 16,
               }}
@@ -71,36 +62,38 @@ const ClassesTimelineItem = ({isFirst, isLast, item, index}) => {
         }}>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             opacity: isActive ? 0.8 : 0.6,
           }}>
-          <Icon name={'time'} color={textColor} />
+          <Icon name={"time"} color={textColor} />
           <Text
-            style={{marginRight: 10, marginLeft: 2, color: textColor}}
+            style={{ marginRight: 10, marginLeft: 2, color: textColor }}
             numberOfLines={1}>
             16:30
           </Text>
-          <Icon name={'people-circle'} color={textColor} />
+          <Icon name={"people-circle"} color={textColor} />
           <Text
-            style={{marginRight: 2, marginLeft: 2, color: textColor}}
+            style={{ marginRight: 2, marginLeft: 2, color: textColor }}
             numberOfLines={1}>
             GCH190414
           </Text>
         </View>
         <Text
-          type={'h4'}
-          style={{marginTop: 4, color: textColor, lineHeight: 26}}
-          numberOfLines={1}>
+          type={"h4"}
+          style={{ marginTop: 4, color: textColor, lineHeight: 26 }}
+          numberOfLines={1}
+        >
           Procedural Programming
         </Text>
       </View>
       <View
         style={{
           paddingHorizontal: 16,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}></View>
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      />
     </View>
   );
 };
@@ -112,21 +105,31 @@ const ClassesTimeline = () => {
       style={{
         marginTop: 16,
         // flex: 1,
-      }}>
-      <FlatList
-        data={data.reverse()}
-        inverted
-        renderItem={({item, index, separators}) => {
-          return (
-            <ClassesTimelineItem
-              item={item}
-              index={index}
-              isFirst={index === 0}
-              isLast={index === data.length - 1}
-            />
-          );
-        }}
-      />
+      }}
+    >
+      {data.map((item, index) => (
+        <ClassesTimelineItem
+          key={index}
+          item={item}
+          index={index}
+          isFirst={index === 0}
+          isLast={index === data.length - 1}
+        />
+      ))}
+      {/*<FlatList*/}
+      {/*  data={data.reverse()}*/}
+      {/*  inverted*/}
+      {/*  renderItem={({ item, index, separators }) => {*/}
+      {/*    return (*/}
+      {/*      <ClassesTimelineItem*/}
+      {/*        item={item}*/}
+      {/*        index={index}*/}
+      {/*        isFirst={index === 0}*/}
+      {/*        isLast={index === data.length - 1}*/}
+      {/*      />*/}
+      {/*    );*/}
+      {/*  }}*/}
+      {/*/>*/}
     </View>
   );
 };

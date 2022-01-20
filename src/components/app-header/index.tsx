@@ -2,6 +2,7 @@ import React from "react";
 import { Image, StatusBar, View } from "react-native";
 import Text from "@components/common/Text";
 import { Colors } from "@config/styling";
+import UserAvatar from "@components/user-avatar";
 
 const AppHeader = () => {
   return (
@@ -39,9 +40,8 @@ const AppHeader = () => {
           justifyContent: "center",
           overflow: "hidden"
         }}>
-          <Image source={{
-            uri: "https://scontent.fhph1-2.fna.fbcdn.net/v/t1.6435-9/96358750_264258654695705_2423493008243556352_n.jpg?_nc_cat=101&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=JMINJSaA33wAX_R1Vzd&_nc_ht=scontent.fhph1-2.fna&oh=00_AT9kRH5sp_iT_yrLY6gy2HGIl0wedqw-LdDvqzSsXQAAPw&oe=620AAF5D"
-          }} style={{
+          <UserAvatar
+            style={{
             width: "100%",
             height: "100%",
             resizeMode: "cover"

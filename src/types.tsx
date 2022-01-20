@@ -1,18 +1,26 @@
 import { StyleProp, TextProps, TextStyle, TextStyleAndroid, ViewStyle } from "react-native";
 
+export interface ILoginData {
+  campus: string,
+  googleTokenExpireTime: number,
+  accessToken: string,
+  idToken: string,
+  userInfo?: IUserInfoResponse
+}
+
 export interface IAuthenticationResponse {
   data: [{
-    AuthenKey: String,
-    Email?: String,
-    Rollnumber?: String,
-    StudentName?: String
-    TypeAcc?: String,
+    AuthenKey: string,
+    Email?: string,
+    Rollnumber?: string,
+    StudentName?: string
+    TypeAcc?: string,
   }],
-  error_message?: String,
-  message?: String,
+  error_message?: string,
+  message?: string,
   status?: Number,
-  status_string?: String,
-  summary_data?: String
+  status_string?: string,
+  summary_data?: string
 }
 
 export interface ITextComponent extends TextProps {
@@ -22,7 +30,7 @@ export interface ITextComponent extends TextProps {
 }
 
 export interface IBlockProps {
-  type?: String,
+  type?: string,
   style?: ViewStyle,
   children?: any,
   strong?: boolean,
@@ -31,4 +39,40 @@ export interface IBlockProps {
   noMarginLeft?: boolean,
   noMarginRight?: boolean,
   numberOfLines?: Number
+}
+
+export interface IUserInfoResponse {
+  Fullname: string,
+  Address: string
+  CampusID: number,
+  DateOfBirth: string,
+  Nganh: string,
+  CurrentTermNo: number,
+  DateOfIssue: string,
+  Email: string,
+  EnrolDate: string,
+  FirstName: string,
+  LastName: string,
+  Gender: boolean,
+  HomePhone: string,
+  IDCard: string,
+  StudentCode: string,
+  ParentName: string,
+  ParentPhone: string,
+  ParentJob: string,
+  ParentEmail: string,
+  ParentAddress: string,
+  PlaceOfIssue: string,
+  PlaceOfWork: string,
+  Progress: boolean,
+  RollNumber: string,
+  StatusCode: string,
+}
+
+export interface ISemester {
+  CampusID?: number,
+  EndDate?: string,
+  SemesterName?: string,
+  StartDate?: string,
+  TermID?: number
 }

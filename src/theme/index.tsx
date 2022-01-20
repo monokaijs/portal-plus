@@ -8,6 +8,8 @@ const DefaultAppTheme = {
     ...DefaultTheme.colors,
     primary: Colors.primary,
     background: Colors.background,
+    card: Colors.blockBackground,
+    text: Colors.darkText,
   },
 };
 
