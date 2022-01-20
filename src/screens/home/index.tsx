@@ -13,7 +13,7 @@ import { ISemester } from "../../types";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-  const account = useSelector((state: RootState) => state.account);
+  const {userInfo: account} = useSelector((state: RootState) => state.app);
   const semester = useSelector((state: RootState) => state.semester);
   // useEffect(() => {
   //   (async () => {

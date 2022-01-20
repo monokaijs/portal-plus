@@ -13,7 +13,7 @@ import { setAuthModalShown } from "@redux/reducers/app.reducer";
 const PersonalScreen = () => {
   const dispatch = useDispatch();
   const [birthday, setBirthday] = useState("");
-  const account = useSelector((state: RootState) => state.account);
+  const { userInfo: account } = useSelector((state: RootState) => state.app);
   const { colors } = useTheme();
 
   useEffect(() => {

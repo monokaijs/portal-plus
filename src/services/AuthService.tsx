@@ -1,8 +1,9 @@
 import { getData, setData } from "./StorageService";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import axios from "axios";
-import { IAuthenticationResponse, ILoginData } from "../types";
+import { IAuthenticationResponse, ILoginData, IUserInfo } from "../types";
 import ApiService from "./ApiService";
+import { defaultAccountInfo } from "@config/default-data";
 
 class AuthService {
   static authCode = "";
@@ -43,6 +44,7 @@ class AuthService {
         const signInState = await GoogleSignin.signInSilently();
         if (!signInState.idToken) throw "Failed to renew token";
       }
+      console.log('token renewed');
       return await this.signIn(loginData.campus);
     } catch (e) {
       return false;
@@ -51,22 +53,37 @@ class AuthService {
   }
 
   static async signIn(selectedCampus: string) {
-    const {idToken, accessToken} = await GoogleSignin.getTokens();
+    const { idToken, accessToken } = await GoogleSignin.getTokens();
     const googleTokenExpireTime = await AuthService.getGoogleTokenExpireTime();
-    const authData : IAuthenticationResponse = await ApiService.loginByGoogleToken(idToken || "", selectedCampus);
+    const authData: IAuthenticationResponse = await ApiService.loginByGoogleToken(idToken || "", selectedCampus);
     ApiService.currentCampus = selectedCampus;
     const rollNumber = authData.data[0].Rollnumber || "";
-    const studentInfo : any = await ApiService.getStudentInfo(rollNumber, selectedCampus);
-    await AuthService.setLoginData({
+    const studentInfo: any = await ApiService.getStudentInfo(rollNumber, selectedCampus);
+    const loginData = {
       campus: selectedCampus,
       googleTokenExpireTime,
       idToken: idToken || "",
       accessToken: accessToken || "",
-      userInfo: studentInfo
-    });
-    console.log('new auth data', authData);
+      programId: -1,
+    };
+    await AuthService.setLoginData(loginData);
+    await AuthService.setUserInfo(studentInfo);
     await AuthService.setLoginStatus(true);
     this.setAPAuthCode(authData.data[0].AuthenKey);
+    return {
+      loginData,
+      userInfo: studentInfo,
+    };
+  }
+
+  static async setUserInfo(userInfo: IUserInfo): Promise<any> {
+    console.log("set-user-info", userInfo);
+    return await setData("userInfo", userInfo);
+  }
+
+  static async getUserInfo(): Promise<IUserInfo> {
+    const userInfo: any = await getData("userInfo", defaultAccountInfo);
+    return userInfo;
   }
 
   static async signOut() {
@@ -77,7 +94,7 @@ class AuthService {
       accessToken: "",
       idToken: "",
       googleTokenExpireTime: 0,
-      userInfo: {},
+      programId: -1,
     });
   }
 

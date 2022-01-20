@@ -5,7 +5,7 @@ export interface ILoginData {
   googleTokenExpireTime: number,
   accessToken: string,
   idToken: string,
-  userInfo?: IUserInfoResponse
+  programId: number
 }
 
 export interface IAuthenticationResponse {
@@ -39,6 +39,34 @@ export interface IBlockProps {
   noMarginLeft?: boolean,
   noMarginRight?: boolean,
   numberOfLines?: Number
+}
+
+export interface IUserInfo {
+  fullName: string,
+  address: string,
+  campusId: number,
+  dateOfBirth: string,
+  major: string,
+  currentTermNo: number,
+  dateOfIssue: string,
+  email: string,
+  enrollDate: string,
+  firstName: string,
+  lastName: string,
+  gender: boolean,
+  homePhone: string,
+  idCard: string,
+  studentCode: string,
+  parentName: string,
+  parentPhone: string,
+  parentJob: string,
+  parentEmail: string,
+  parentAddress: string,
+  placeOfIssue: string,
+  placeOfWork: string,
+  progress: boolean,
+  rollNumber: string,
+  statusCode: string,
 }
 
 export interface IUserInfoResponse {
