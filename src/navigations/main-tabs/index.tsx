@@ -1,153 +1,50 @@
-import React, { useMemo } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import AnimatedTabBar, {
-  TabsConfig,
-  BubbleTabBarItemConfig,
-} from "@gorhom/animated-tabbar";
-import HomeScreen from "@screens/home";
-import HomeSVG from "@assets/icons/HomeSVG";
-import LikeSVG from "@assets/icons/LikeSVG";
-import SearchSVG from "@assets/icons/SearchSVG";
-import ProfileSVG from "@assets/icons/ProfileSVG";
-import { MainTabsParams } from "./type";
-import { Colors } from "@config/styling";
-import { useTheme } from "@react-navigation/native";
-import PersonalScreen from "@screens/personal";
-import CalendarScreen from "@screens/calendar";
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import CalendarScreen from '@screens/calendar';
+import HomeScreen from '@screens/home';
+import PersonalScreen from '@screens/personal';
+import React from 'react';
+import TabBarAnimation from './tab-bar-animation';
 
-const Tab = createBottomTabNavigator<MainTabsParams>();
+const Tab = createBottomTabNavigator();
 
-const MainTabsNavigator = () => {
-  const { colors } = useTheme();
-  const tabBarOptions: any = useMemo(
-    () => ({
-      safeAreaInsets: {
-        bottom: 0,
-      },
-      style: {
-        position: "absolute",
-        left: 0,
-        right: 0,
-        bottom: 0,
-        borderRadius: 100,
-        marginHorizontal: 20,
-        marginBottom: 16,
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 12,
-        },
-        shadowOpacity: 0.4,
-        shadowRadius: 16,
-        elevation: 24,
-      },
-    }),
-    [],
-  );
+const BottomTabNavigation = () => {
   return (
     <Tab.Navigator
-      tabBarOptions={tabBarOptions}
-      tabBar={props => (
-        <AnimatedTabBar
-          iconSize={20}
-          itemOuterSpace={12}
-          itemInnerSpace={16}
-          duration={750}
-          tabs={{
-            Home: {
-              labelStyle: {
-                color: colors.primary,
-                fontWeight: "bold",
-                fontSize: 13,
-              },
-              icon: {
-                component: HomeSVG,
-                color: colors.primary,
-              },
-            },
-            Calendar: {
-              labelStyle: {
-                color: colors.primary,
-                fontWeight: "bold",
-                fontSize: 13,
-              },
-              icon: {
-                component: LikeSVG,
-                color: colors.primary,
-              },
-            },
-            Notification: {
-              labelStyle: {
-                color: colors.primary,
-                fontWeight: "bold",
-                fontSize: 13,
-              },
-              icon: {
-                component: SearchSVG,
-                color: colors.primary,
-              },
-            },
-            Tool: {
-              labelStyle: {
-                color: colors.primary,
-                fontWeight: "bold",
-                fontSize: 13,
-              },
-              icon: {
-                component: ProfileSVG,
-                color: colors.primary,
-              },
-            },
-            Personal: {
-              labelStyle: {
-                color: colors.primary,
-                fontWeight: "bold",
-                fontSize: 13,
-              },
-              icon: {
-                component: ProfileSVG,
-                color: colors.primary
-              },
-            },
-          }}
-          preset={"flashy"}
-          {...props}
-        />
-      )}>
+      initialRouteName="Home"
+      screenOptions={{
+        headerShown: false,
+      }}
+      tabBar={rest => <TabBarAnimation {...rest} />}>
       <Tab.Screen
         name="Home"
-        initialParams={{
-          backgroundColor: colors.primary,
-          nextScreen: "Likes",
-        }}
         component={HomeScreen}
+        options={{
+          tabBarLabel: 'Home',
+        }}
       />
       <Tab.Screen
         name="Calendar"
-        initialParams={{
-          backgroundColor: colors.primary,
-          nextScreen: "Notification",
-        }}
         component={CalendarScreen}
+        options={{
+          tabBarLabel: 'Calendar',
+        }}
       />
       <Tab.Screen
         name="Notification"
-        initialParams={{
-          backgroundColor: colors.primary,
-          nextScreen: "Profile",
-        }}
         component={HomeScreen}
+        options={{
+          tabBarLabel: 'Notification',
+        }}
       />
       <Tab.Screen
         name="Personal"
-        initialParams={{
-          backgroundColor: colors.primary,
-          nextScreen: 'Home',
-        }}
         component={PersonalScreen}
+        options={{
+          tabBarLabel: 'Personal',
+        }}
       />
     </Tab.Navigator>
   );
 };
 
-export default MainTabsNavigator;
+export default BottomTabNavigation;
