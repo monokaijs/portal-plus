@@ -1,6 +1,5 @@
 export const defaultAccountInfo = {
   fullName: "",
-  avatarUrl: "",
   address: "",
   campusId: 0,
   dateOfBirth: "",

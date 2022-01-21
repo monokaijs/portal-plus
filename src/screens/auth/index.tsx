@@ -7,19 +7,16 @@ import Button from "@components/common/Button";
 import { useTheme } from "@react-navigation/native";
 import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 import { Picker } from "@react-native-picker/picker";
-import ApiService from "../../services/ApiService";
-import { IAuthenticationResponse, IUserInfoResponse } from "../../types";
-import AuthService from "../../services/AuthService";
 import { loadAppData, setAuthModalShown } from "@redux/reducers/app.reducer";
-import { err } from "react-native-svg/lib/typescript/xml";
-import { setData } from "../../services/StorageService";
+import { appSignIn } from "@redux/reducers/auth.reducer";
+import ApiService from "../../services/ApiService";
 
 const AuthModal = () => {
   const dispatch = useDispatch();
   const { colors } = useTheme();
   const [loading, setLoading] = useState(false);
   const [selectedCampus, setSelectedCampus] = useState("");
-  const app = useSelector((state: RootState) => state.app);
+  const { app, auth } = useSelector((state: RootState) => state);
   const screen = Dimensions.get("screen");
   const figureSize = screen.width > screen.height ? screen.height : screen.width;
 
@@ -28,12 +25,12 @@ const AuthModal = () => {
       // TODO: warning about selecting campus
       return;
     }
+    ApiService.currentCampus = selectedCampus;
     setLoading(true);
     try {
       await GoogleSignin.hasPlayServices();
-      const googleAuth = await GoogleSignin.signIn();
-      const {userInfo} = await AuthService.signIn(selectedCampus);
-      dispatch(loadAppData())
+      await GoogleSignin.signIn();
+      await dispatch(appSignIn());
       setLoading(false);
       dispatch(setAuthModalShown(false));
     } catch (error: any) {
@@ -42,7 +39,7 @@ const AuthModal = () => {
   };
 
   useEffect(() => {
-    if (!app.isLoggedIn) {
+    if (!auth.isLoggedIn) {
       dispatch(setAuthModalShown(true));
     }
   }, [app]);
@@ -56,7 +53,7 @@ const AuthModal = () => {
   }, []);
 
   return (
-    <Modal style={{ flex: 1 }} visible={!app.isLoggedIn}>
+    <Modal style={{ flex: 1 }} visible={!auth.isLoggedIn}>
       <View style={{ flex: 1 }}>
         <View style={{
           width: "100%",

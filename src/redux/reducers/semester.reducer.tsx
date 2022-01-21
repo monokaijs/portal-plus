@@ -17,7 +17,8 @@ const semesterSlice = createSlice({
     setSemestersList(state, action: PayloadAction<ISemester[]>) {
       state.semesters = action.payload;
       const currentTime = new Date().getTime();
-      const currentSemester = action.payload.find(x => currentTime > new Date(x.StartDate).getTime() && currentTime < new Date(x.EndDate).getTime())
+      const semesters: ISemester[] = action.payload;
+      const currentSemester = semesters.find(x => currentTime > new Date(x.StartDate).getTime() && currentTime < new Date(x.EndDate).getTime())
       if (currentSemester) {
         state.currentSemester = currentSemester;
       }

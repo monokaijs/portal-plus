@@ -10,11 +10,12 @@ import { loadAppData } from "@redux/reducers/app.reducer";
 import AuthService from "./services/AuthService";
 
 const AppContent = () => {
-  const app = useSelector((state: RootState) => state.app);
+  const { app, auth } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadAppData());
   }, []);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar

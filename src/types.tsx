@@ -98,9 +98,9 @@ export interface IUserInfoResponse {
 }
 
 export interface ISemester {
-  CampusID?: number,
-  EndDate?: string,
-  SemesterName?: string,
-  StartDate?: string,
-  TermID?: number
+  CampusID: number,
+  EndDate: string,
+  SemesterName: string,
+  StartDate: string,
+  TermID: number
 }

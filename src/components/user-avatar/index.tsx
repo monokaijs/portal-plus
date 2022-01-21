@@ -7,11 +7,11 @@ import AuthService from "../../services/AuthService";
 
 const UserAvatar = (props: any) => {
   const [avatar, setAvatar] = useState(require("@assets/default-avatar.jpg"));
-  const {app} = useSelector((state: RootState) => state);
+  const {auth, app} = useSelector((state: RootState) => state);
   useEffect(() => {
-    console.log(app.appReady, app.isLoggedIn, app.userInfo.rollNumber);
+    console.log(app.appReady, auth.isLoggedIn, app.userInfo.rollNumber);
     (async () => {
-      if (app.appReady && app.isLoggedIn && app.userInfo.rollNumber) {
+      if (app.appReady && auth.isLoggedIn && app.userInfo.rollNumber) {
         console.log(app.userInfo);
         const avatarBase64 : any = await ApiService.getStudentPicture(app.userInfo.rollNumber);
         setAvatar({
