@@ -116,14 +116,14 @@ export interface IAppProgram {
 }
 
 export interface IActivityRecord {
-  "AttendanceStatus": string,
-  "Date": string,
-  "GroupName": string,
-  "Lecturer": string,
-  "MeetURL": string,
-  "RoomNo": string,
-  "SessionNo": string,
-  "Slot": string,
-  "SlotTime": string,
-  "SubjectCode": string
+  AttendanceStatus: string,
+  Date: string,
+  GroupName: string,
+  Lecturer: string,
+  MeetURL: string,
+  RoomNo: string,
+  SessionNo: string,
+  Slot: string,
+  SlotTime: string,
+  SubjectCode: string
 }

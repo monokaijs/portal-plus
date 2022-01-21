@@ -6,6 +6,8 @@ import { useTheme } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 import { RootState } from "@redux/store";
 import ApiService from "../../services/ApiService";
+import moment from "moment";
+import { IActivityRecord } from "../../types";
 
 // @ts-ignore
 const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
@@ -69,13 +71,13 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
           <Text
             style={{ marginRight: 10, marginLeft: 2, color: textColor }}
             numberOfLines={1}>
-            16:30
+            {item.SlotTime.replace("(", "").replace(")", "")}
           </Text>
           <Icon name={"people-circle"} color={textColor} />
           <Text
             style={{ marginRight: 2, marginLeft: 2, color: textColor }}
             numberOfLines={1}>
-            GCH190414
+            {item.GroupName}
           </Text>
         </View>
         <Text
@@ -83,7 +85,7 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
           style={{ marginTop: 4, color: textColor, lineHeight: 26 }}
           numberOfLines={1}
         >
-          Procedural Programming
+          {item.SubjectCode}
         </Text>
       </View>
       <View
@@ -100,11 +102,17 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
 const ClassesTimeline = () => {
   const {app, auth, calendar} = useSelector((state: RootState) => state);
   const [calendarLoaded, setCalendarLoaded] = useState(false);
+  const [todayActivities, setTodayActivities] = useState([] as IActivityRecord[]);
 
   const loadCalendar = async () => {
     const currentProgramId = calendar.currentProgram.id;
-    ApiService.getStudentActivities(app.userInfo.rollNumber, currentProgramId, calendar.currentSemester.SemesterName).then(response => {
-      console.log(response);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    ApiService.getStudentActivities(app.userInfo.rollNumber, currentProgramId, calendar.currentSemester.SemesterName).then(acts => {
+      const activities = acts.filter(act => {
+        return moment(act.Date, 'l').toDate().getTime() === today.getTime()
+      });
+      setTodayActivities(activities);
     })
   };
 
@@ -116,8 +124,6 @@ const ClassesTimeline = () => {
       });
     }
   }, [app, auth, calendar]);
-
-  const data = [0, 1, 2, 3, 4, 5, 6, 7];
   return (
     <View
       style={{
@@ -125,13 +131,13 @@ const ClassesTimeline = () => {
         // flex: 1,
       }}
     >
-      {data.map((item, index) => (
+      {todayActivities.map((item, index) => (
         <ClassesTimelineItem
           key={index}
           item={item}
           index={index}
           isFirst={index === 0}
-          isLast={index === data.length - 1}
+          isLast={index === todayActivities.length - 1}
         />
       ))}
       {/*<FlatList*/}

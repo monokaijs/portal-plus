@@ -1,6 +1,6 @@
 import axios from "axios";
 import { XMLParser } from 'fast-xml-parser';
-import { IAuthenticationResponse, IProgram, ISemester, IUserInfo, IUserInfoResponse } from "../types";
+import { IActivityRecord, IAuthenticationResponse, IProgram, ISemester, IUserInfo, IUserInfoResponse } from "../types";
 import AuthService from "./AuthService";
 
 class ApiService {
@@ -74,8 +74,7 @@ class ApiService {
   }
 
   static async getStudentActivities(rollNumber: string, programId: string, semesterName: string, campusCode: string = this.currentCampus) {
-    console.log(rollNumber, programId, semesterName, campusCode);
-    return new Promise((resolve, reject) => {
+    return new Promise<IActivityRecord[]>((resolve, reject) => {
       this.sendRequest("GetActivityStudent", {
         StudentCode: rollNumber,
         CampusCode: campusCode,
