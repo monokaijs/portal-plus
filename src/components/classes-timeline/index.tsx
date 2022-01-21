@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, Linking, TouchableOpacity, View } from "react-native";
 import Text from "@components/common/Text";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useTheme } from "@react-navigation/native";
@@ -8,12 +8,20 @@ import { RootState } from "@redux/store";
 import ApiService from "../../services/ApiService";
 import moment from "moment";
 import { IActivityRecord } from "../../types";
+import { Colors as DefaultAppColors } from "@config/styling";
 
 // @ts-ignore
 const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
   const {colors: Colors} = useTheme();
   const isActive = index === 1;
   const textColor = isActive ? "#FFFFFF" : Colors.text;
+  const getRoundColor = () => {
+    if (item.AttendanceStatus === "N") {
+      return isActive ? "#FFFFFF" : Colors.primary
+    } else if (item.AttendanceStatus === "P") {
+      return DefaultAppColors.success
+    } else return DefaultAppColors.failed
+  }
   return (
     <View
       style={{
@@ -37,13 +45,13 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
             height: 14,
             borderRadius: 10,
             borderWidth: 3,
-            borderColor: isActive ? "#FFFFFF" : Colors.primary,
+            borderColor: getRoundColor(),
             position: "relative",
           }}>
           {!isLast && (
             <View
               style={{
-                height: 68,
+                height: 62,
                 borderLeftWidth: 2,
                 borderStyle: "dashed",
                 borderLeftColor: Colors.primary,
@@ -88,13 +96,20 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
           {item.SubjectCode}
         </Text>
       </View>
-      <View
+      <TouchableOpacity
         style={{
           paddingHorizontal: 16,
           alignItems: "center",
           justifyContent: "center",
         }}
-      />
+        onPress={() => {
+          Linking.openURL(`https://meet.google.com/${item.MeetURL}`).then(r => {
+
+          });
+        }}
+      >
+        <Icon name={"videocam"} size={16} color={!isActive ? "#00000066" : "#FFFFFF"}/>
+      </TouchableOpacity>
     </View>
   );
 };

@@ -5,4 +5,6 @@ export const Colors = {
   inputBackground: '#FFFFFF',
   darkText: '#232323',
   lightText: '#878686',
+  success: "#C6D57E",
+  failed: "#D57E7E"
 };
