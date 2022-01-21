@@ -9,11 +9,12 @@ import Icon from "react-native-vector-icons/Ionicons";
 import UserAvatar from "@components/user-avatar";
 import AuthService from "../../services/AuthService";
 import { setAuthModalShown } from "@redux/reducers/app.reducer";
+import { signOut } from "@redux/reducers/auth.reducer";
 
 const PersonalScreen = () => {
   const dispatch = useDispatch();
   const [birthday, setBirthday] = useState("");
-  const account = useSelector((state: RootState) => state.account);
+  const { userInfo: account } = useSelector((state: RootState) => state.app);
   const { colors } = useTheme();
 
   useEffect(() => {
@@ -145,9 +146,7 @@ const PersonalScreen = () => {
         <TouchableOpacity
           style={{padding: 30}}
           onPress={() => {
-            AuthService.signOut().then(() => {
-              dispatch(setAuthModalShown(true));
-            });
+            dispatch(signOut());
           }}
         >
           <Text>

@@ -8,12 +8,12 @@ import { LogBox, ScrollView, View } from "react-native";
 import ApiService from "../../services/ApiService";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { setSemestersList } from "@redux/reducers/semester.reducer";
+import { setSemestersList } from "@redux/reducers/calendar.reducer";
 import { ISemester } from "../../types";
 
 const HomeScreen = () => {
   const dispatch = useDispatch();
-  const account = useSelector((state: RootState) => state.account);
+  const {userInfo: account} = useSelector((state: RootState) => state.app);
   const semester = useSelector((state: RootState) => state.semester);
   // useEffect(() => {
   //   (async () => {

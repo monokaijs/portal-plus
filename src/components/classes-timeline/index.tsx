@@ -1,18 +1,27 @@
-import React from "react";
-import { FlatList, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { FlatList, Linking, TouchableOpacity, View } from "react-native";
 import Text from "@components/common/Text";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useTheme } from "@react-navigation/native";
-
-interface IDotProps {
-  size: any;
-}
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import ApiService from "../../services/ApiService";
+import moment from "moment";
+import { IActivityRecord } from "../../types";
+import { Colors as DefaultAppColors } from "@config/styling";
 
 // @ts-ignore
 const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
   const {colors: Colors} = useTheme();
   const isActive = index === 1;
   const textColor = isActive ? "#FFFFFF" : Colors.text;
+  const getRoundColor = () => {
+    if (item.AttendanceStatus === "N") {
+      return isActive ? "#FFFFFF" : Colors.primary
+    } else if (item.AttendanceStatus === "P") {
+      return DefaultAppColors.success
+    } else return DefaultAppColors.failed
+  }
   return (
     <View
       style={{
@@ -36,13 +45,13 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
             height: 14,
             borderRadius: 10,
             borderWidth: 3,
-            borderColor: isActive ? "#FFFFFF" : Colors.primary,
+            borderColor: getRoundColor(),
             position: "relative",
           }}>
           {!isLast && (
             <View
               style={{
-                height: 68,
+                height: 62,
                 borderLeftWidth: 2,
                 borderStyle: "dashed",
                 borderLeftColor: Colors.primary,
@@ -70,13 +79,13 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
           <Text
             style={{ marginRight: 10, marginLeft: 2, color: textColor }}
             numberOfLines={1}>
-            16:30
+            {item.SlotTime.replace("(", "").replace(")", "")}
           </Text>
           <Icon name={"people-circle"} color={textColor} />
           <Text
             style={{ marginRight: 2, marginLeft: 2, color: textColor }}
             numberOfLines={1}>
-            GCH190414
+            {item.GroupName}
           </Text>
         </View>
         <Text
@@ -84,22 +93,52 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
           style={{ marginTop: 4, color: textColor, lineHeight: 26 }}
           numberOfLines={1}
         >
-          Procedural Programming
+          {item.SubjectCode}
         </Text>
       </View>
-      <View
+      <TouchableOpacity
         style={{
           paddingHorizontal: 16,
           alignItems: "center",
           justifyContent: "center",
         }}
-      />
+        onPress={() => {
+          Linking.openURL(`https://meet.google.com/${item.MeetURL}`).then(r => {
+
+          });
+        }}
+      >
+        <Icon name={"videocam"} size={16} color={!isActive ? "#00000066" : "#FFFFFF"}/>
+      </TouchableOpacity>
     </View>
   );
 };
 
 const ClassesTimeline = () => {
-  const data = [0, 1, 2, 3, 4, 5, 6, 7];
+  const {app, auth, calendar} = useSelector((state: RootState) => state);
+  const [calendarLoaded, setCalendarLoaded] = useState(false);
+  const [todayActivities, setTodayActivities] = useState([] as IActivityRecord[]);
+
+  const loadCalendar = async () => {
+    const currentProgramId = calendar.currentProgram.id;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    ApiService.getStudentActivities(app.userInfo.rollNumber, currentProgramId, calendar.currentSemester.SemesterName).then(acts => {
+      const activities = acts.filter(act => {
+        return moment(act.Date, 'l').toDate().getTime() === today.getTime()
+      });
+      setTodayActivities(activities);
+    })
+  };
+
+  useEffect(() => {
+    console.log("app ready", app.appReady)
+    if (app.appReady && auth.isLoggedIn && calendar.currentProgram.id !== '' && !calendarLoaded) {
+      loadCalendar().then(() => {
+
+      });
+    }
+  }, [app, auth, calendar]);
   return (
     <View
       style={{
@@ -107,13 +146,13 @@ const ClassesTimeline = () => {
         // flex: 1,
       }}
     >
-      {data.map((item, index) => (
+      {todayActivities.map((item, index) => (
         <ClassesTimelineItem
           key={index}
           item={item}
           index={index}
           isFirst={index === 0}
-          isLast={index === data.length - 1}
+          isLast={index === todayActivities.length - 1}
         />
       ))}
       {/*<FlatList*/}

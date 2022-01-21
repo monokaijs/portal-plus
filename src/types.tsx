@@ -5,7 +5,7 @@ export interface ILoginData {
   googleTokenExpireTime: number,
   accessToken: string,
   idToken: string,
-  userInfo?: IUserInfoResponse
+  programId: string
 }
 
 export interface IAuthenticationResponse {
@@ -41,6 +41,34 @@ export interface IBlockProps {
   numberOfLines?: Number
 }
 
+export interface IUserInfo {
+  fullName: string,
+  address: string,
+  campusId: number,
+  dateOfBirth: string,
+  major: string,
+  currentTermNo: number,
+  dateOfIssue: string,
+  email: string,
+  enrollDate: string,
+  firstName: string,
+  lastName: string,
+  gender: boolean,
+  homePhone: string,
+  idCard: string,
+  studentCode: string,
+  parentName: string,
+  parentPhone: string,
+  parentJob: string,
+  parentEmail: string,
+  parentAddress: string,
+  placeOfIssue: string,
+  placeOfWork: string,
+  progress: boolean,
+  rollNumber: string,
+  statusCode: string,
+}
+
 export interface IUserInfoResponse {
   Fullname: string,
   Address: string
@@ -70,9 +98,32 @@ export interface IUserInfoResponse {
 }
 
 export interface ISemester {
-  CampusID?: number,
-  EndDate?: string,
-  SemesterName?: string,
-  StartDate?: string,
-  TermID?: number
+  CampusID: number,
+  EndDate: string,
+  SemesterName: string,
+  StartDate: string,
+  TermID: number
+}
+
+export interface IProgram {
+  ProgramId: string,
+  ProgramName: string,
+}
+
+export interface IAppProgram {
+  id: string;
+  name: string;
+}
+
+export interface IActivityRecord {
+  AttendanceStatus: string,
+  Date: string,
+  GroupName: string,
+  Lecturer: string,
+  MeetURL: string,
+  RoomNo: string,
+  SessionNo: string,
+  Slot: string,
+  SlotTime: string,
+  SubjectCode: string
 }

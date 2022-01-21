@@ -1,6 +1,6 @@
 import axios from "axios";
 import { XMLParser } from 'fast-xml-parser';
-import { IAuthenticationResponse, IUserInfoResponse } from "../types";
+import { IActivityRecord, IAuthenticationResponse, IProgram, ISemester, IUserInfo, IUserInfoResponse } from "../types";
 import AuthService from "./AuthService";
 
 class ApiService {
@@ -9,7 +9,8 @@ class ApiService {
   static xmlParser = new XMLParser();
 
   static sendRequest(endpoint: string, data: Object) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise<any>(async (resolve, reject) => {
+      console.log("authcode - ", AuthService.authCode);
       axios(this.baseUrl + "/" + endpoint, {
         method: "GET",
         headers: {
@@ -33,7 +34,9 @@ class ApiService {
           }
         }
         return resolve(response.data)
-      }).catch(reject);
+      }).catch(err => {
+        reject(err)
+      });
     });
   }
 
@@ -60,16 +63,18 @@ class ApiService {
   }
 
   static async getAllPrograms(campusCode: string = this.currentCampus) {
-    return new Promise((resolve, reject) => {
+    return new Promise<IProgram[]>((resolve, reject) => {
       this.sendRequest("GetAllProgram", {
         CampusCode: campusCode
-      }).then(resolve).catch(reject);
+      }).then(response => {
+        const data : IProgram[] = response.data;
+        resolve(data);
+      }).catch(reject);
     })
   }
 
-  static async getStudentActivities(rollNumber: string, programId: number, semesterName: string, campusCode: string = this.currentCampus) {
-    console.log(rollNumber, programId, semesterName, campusCode);
-    return new Promise((resolve, reject) => {
+  static async getStudentActivities(rollNumber: string, programId: string, semesterName: string, campusCode: string = this.currentCampus) {
+    return new Promise<IActivityRecord[]>((resolve, reject) => {
       this.sendRequest("GetActivityStudent", {
         StudentCode: rollNumber,
         CampusCode: campusCode,
@@ -82,20 +87,47 @@ class ApiService {
   // static async getPrograms()
 
   static async getSemesters(campusCode: string = this.currentCampus) {
-    return new Promise((resolve, reject) => {
+    return new Promise<ISemester[]>((resolve, reject) => {
       this.sendRequest("GetSemester", {
         campusCode: campusCode
       }).then(resolve).catch(reject);
     })
   }
 
-  static async getStudentInfo(rollNumber: string, campusCode: string = this.currentCampus) {
-    return new Promise((resolve, reject) => {
+  static getStudentInfo(rollNumber: string, campusCode: string = this.currentCampus) {
+    return new Promise<IUserInfo>((resolve, reject) => {
       this.sendRequest("GetStudentById", {
         rollNumber: rollNumber,
         CampusCode: campusCode
       }).then((data: any) => {
-        const userInfo:IUserInfoResponse = data[0];
+        const userInfoResponse:IUserInfoResponse = data[0];
+        const userInfo: IUserInfo = {
+          fullName: userInfoResponse.Fullname || "",
+          address: userInfoResponse.Address || "",
+          campusId: userInfoResponse.CampusID || 0,
+          dateOfBirth: userInfoResponse.DateOfBirth || "",
+          major: userInfoResponse.Nganh || "",
+          currentTermNo: userInfoResponse.CurrentTermNo || 0,
+          dateOfIssue: userInfoResponse.DateOfIssue || "",
+          email: userInfoResponse.Email || "",
+          enrollDate: userInfoResponse.EnrolDate || "",
+          firstName: userInfoResponse.FirstName || "",
+          lastName: userInfoResponse.LastName || "",
+          gender: userInfoResponse.Gender || false,
+          homePhone: userInfoResponse.HomePhone || "",
+          idCard: userInfoResponse.IDCard || "",
+          studentCode: userInfoResponse.StudentCode || "",
+          parentName: userInfoResponse.ParentName || "",
+          parentPhone: userInfoResponse.ParentPhone || "",
+          parentJob: userInfoResponse.ParentJob || "",
+          parentEmail: userInfoResponse.ParentEmail || "",
+          parentAddress: userInfoResponse.ParentAddress || "",
+          placeOfIssue: userInfoResponse.PlaceOfIssue || "",
+          placeOfWork: userInfoResponse.PlaceOfWork || "",
+          progress: userInfoResponse.Progress || false,
+          rollNumber: userInfoResponse.RollNumber || "",
+          statusCode: userInfoResponse.StatusCode || "",
+        };
         resolve(userInfo);
       }).catch(reject);
     })

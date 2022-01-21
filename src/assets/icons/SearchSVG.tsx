@@ -1,24 +1,8 @@
 import * as React from 'react';
-import Animated from 'react-native-reanimated';
-import Svg, { G, Circle, Path, PathProps, CircleProps } from 'react-native-svg';
-import { SVGProps } from './type';
+import Svg, {Circle, G, Path} from 'react-native-svg';
+import {SVGProps} from './type';
 
-const AnimatedPath = Animated.createAnimatedComponent(
-  Path
-) as any as React.ComponentClass<
-  Animated.AnimateProps<{}, PathProps & { style?: any }>
->;
-const AnimatedCircle = Animated.createAnimatedComponent(
-  Circle
-) as any as React.ComponentClass<
-  Animated.AnimateProps<{}, CircleProps & { style?: any }>
->;
-
-Animated.addWhitelistedNativeProps({
-  stroke: true,
-});
-
-const SearchSVG = ({ color, size }: SVGProps) => {
+const SearchSVG = ({color, size}: SVGProps) => {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24">
       <G
@@ -27,10 +11,9 @@ const SearchSVG = ({ color, size }: SVGProps) => {
         fill="none"
         fillRule="evenodd"
         strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <AnimatedCircle cx={8} cy={8} r={8} stroke={color} />
-        <AnimatedPath d="M18 18l-4.35-4.35" stroke={color} />
+        strokeLinejoin="round">
+        <Circle cx={8} cy={8} r={8} stroke={color} />
+        <Path d="M18 18l-4.35-4.35" stroke={color} />
       </G>
     </Svg>
   );
