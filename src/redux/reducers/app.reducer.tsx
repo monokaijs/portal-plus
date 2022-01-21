@@ -1,25 +1,37 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IAuthenticationResponse, ILoginData, IUserInfoResponse } from "../../types";
+import { IAppProgram, IAuthenticationResponse, ILoginData, ISemester, IUserInfoResponse } from "../../types";
 import { getData, setData } from "../../services/StorageService";
 import AuthService from "../../services/AuthService";
 import { defaultAccountInfo } from "@config/default-data";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import ApiService from "../../services/ApiService";
 import { appSignIn, refreshAuthData } from "@redux/reducers/auth.reducer";
+import { getCurrentSemester } from "@utils/get-current-semester";
 
 export const loadAppData = createAsyncThunk("app/loadAppData", async (_, thunkAPI) => {
   const isLoggedIn = await AuthService.getLoginStatus();
   const loginData = await AuthService.getLoginData();
   const userInfo = await AuthService.getUserInfo();
+  const currentProgram = await getData("currentProgram", {
+    id: '-1',
+    name: ''
+  }) as IAppProgram;
+  let allSemesters = [] as ISemester[];
+  let currentSemester = {} as ISemester;
   if (isLoggedIn) {
     ApiService.currentCampus = loginData.campus;
     thunkAPI.dispatch(refreshAuthData());
+    allSemesters = await getData("all-semesters", []) as ISemester[];
+    currentSemester = await getCurrentSemester();
   }
 
   return {
     isLoggedIn,
     loginData,
     userInfo,
+    currentProgram,
+    allSemesters,
+    currentSemester,
   };
 });
 

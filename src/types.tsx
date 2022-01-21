@@ -5,7 +5,7 @@ export interface ILoginData {
   googleTokenExpireTime: number,
   accessToken: string,
   idToken: string,
-  programId: number
+  programId: string
 }
 
 export interface IAuthenticationResponse {
@@ -103,4 +103,14 @@ export interface ISemester {
   SemesterName: string,
   StartDate: string,
   TermID: number
+}
+
+export interface IProgram {
+  ProgramId: string,
+  ProgramName: string,
+}
+
+export interface IAppProgram {
+  id: string;
+  name: string;
 }

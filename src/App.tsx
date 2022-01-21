@@ -8,6 +8,7 @@ import { Provider, useDispatch, useSelector } from "react-redux";
 import AuthModal from "@screens/auth";
 import { loadAppData } from "@redux/reducers/app.reducer";
 import AuthService from "./services/AuthService";
+import ProgramPickerModal from "@screens/program-picker";
 
 const AppContent = () => {
   const { app, auth } = useSelector((state: RootState) => state);
@@ -25,6 +26,7 @@ const AppContent = () => {
       />
       <MainTabsNavigator />
       <AuthModal />
+      <ProgramPickerModal />
     </SafeAreaView>
   );
 };

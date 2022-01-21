@@ -3,10 +3,8 @@ import { ILoginData } from "../../types";
 import { setData } from "../../services/StorageService";
 import AuthService from "../../services/AuthService";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import ApiService from "../../services/ApiService";
 import { signInWithGoogle } from "@utils/auth-by-google";
 import { loadAppData } from "@redux/reducers/app.reducer";
-import auth from "@screens/auth";
 
 export const appSignIn = createAsyncThunk(
   "app/signIn",
@@ -18,12 +16,16 @@ export const appSignIn = createAsyncThunk(
 export const signOut = createAsyncThunk("app/signOut", async (thunkAPI) => {
   await GoogleSignin.signOut();
   await AuthService.setLoginStatus(false);
+  await setData("currentProgram", {
+    id: '-1',
+    name: ''
+  });
   await AuthService.setLoginData({
     campus: "",
     accessToken: "",
     idToken: "",
     googleTokenExpireTime: 0,
-    programId: -1,
+    programId: '-1',
   });
 });
 
@@ -39,8 +41,7 @@ export const refreshAuthData = createAsyncThunk("app/refreshAuthData", async (th
       const signInState = await GoogleSignin.signInSilently();
       if (!signInState.idToken) return Promise.reject("Failed to renew token");
     }
-    const authData = await signInWithGoogle();
-    return authData;
+    return await signInWithGoogle();
   } catch (e) {
     console.log(e);
     return Promise.reject("Failed to refresh authentication data");

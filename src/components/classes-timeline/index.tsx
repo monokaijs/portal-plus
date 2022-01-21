@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, View } from "react-native";
 import Text from "@components/common/Text";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useTheme } from "@react-navigation/native";
-
-interface IDotProps {
-  size: any;
-}
+import { useSelector } from "react-redux";
+import { RootState } from "@redux/store";
+import ApiService from "../../services/ApiService";
 
 // @ts-ignore
 const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
@@ -99,6 +98,24 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }) => {
 };
 
 const ClassesTimeline = () => {
+  const {app, auth, calendar} = useSelector((state: RootState) => state);
+  const [calendarLoaded, setCalendarLoaded] = useState(false);
+
+  const loadCalendar = async () => {
+    const currentProgramId = calendar.currentProgram.id;
+    ApiService.getStudentActivities(app.userInfo.rollNumber, currentProgramId, calendar.currentSemester.SemesterName).then(response => {
+      console.log(response);
+    })
+  };
+
+  useEffect(() => {
+    if (app.appReady && auth.isLoggedIn && calendar.currentProgram.id !== '' && !calendarLoaded) {
+      loadCalendar().then(() => {
+
+      });
+    }
+  }, [app, auth, calendar]);
+
   const data = [0, 1, 2, 3, 4, 5, 6, 7];
   return (
     <View

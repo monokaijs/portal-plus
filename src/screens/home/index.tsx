@@ -8,7 +8,7 @@ import { LogBox, ScrollView, View } from "react-native";
 import ApiService from "../../services/ApiService";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@redux/store";
-import { setSemestersList } from "@redux/reducers/semester.reducer";
+import { setSemestersList } from "@redux/reducers/calendar.reducer";
 import { ISemester } from "../../types";
 
 const HomeScreen = () => {

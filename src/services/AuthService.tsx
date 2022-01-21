@@ -1,7 +1,7 @@
 import { getData, setData } from "./StorageService";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import axios from "axios";
-import { IAuthenticationResponse, ILoginData, IUserInfo } from "../types";
+import { ILoginData, IUserInfo } from "../types";
 import { defaultAccountInfo } from "@config/default-data";
 
 class AuthService {
@@ -39,20 +39,7 @@ class AuthService {
   }
 
   static async getUserInfo(): Promise<IUserInfo> {
-    const userInfo: any = await getData("userInfo", defaultAccountInfo);
-    return userInfo;
-  }
-
-  static async signOut() {
-    await GoogleSignin.signOut();
-    await this.setLoginStatus(false);
-    await this.setLoginData({
-      campus: "",
-      accessToken: "",
-      idToken: "",
-      googleTokenExpireTime: 0,
-      programId: -1,
-    });
+    return await getData("userInfo", defaultAccountInfo) as IUserInfo;
   }
 
   static async getGoogleTokenExpireTime() {

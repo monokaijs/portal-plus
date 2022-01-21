@@ -1,6 +1,6 @@
 import axios from "axios";
 import { XMLParser } from 'fast-xml-parser';
-import { IAuthenticationResponse, IUserInfo, IUserInfoResponse } from "../types";
+import { IAuthenticationResponse, IProgram, ISemester, IUserInfo, IUserInfoResponse } from "../types";
 import AuthService from "./AuthService";
 
 class ApiService {
@@ -9,7 +9,7 @@ class ApiService {
   static xmlParser = new XMLParser();
 
   static sendRequest(endpoint: string, data: Object) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise<any>(async (resolve, reject) => {
       console.log("authcode - ", AuthService.authCode);
       axios(this.baseUrl + "/" + endpoint, {
         method: "GET",
@@ -63,14 +63,17 @@ class ApiService {
   }
 
   static async getAllPrograms(campusCode: string = this.currentCampus) {
-    return new Promise((resolve, reject) => {
+    return new Promise<IProgram[]>((resolve, reject) => {
       this.sendRequest("GetAllProgram", {
         CampusCode: campusCode
-      }).then(resolve).catch(reject);
+      }).then(response => {
+        const data : IProgram[] = response.data;
+        resolve(data);
+      }).catch(reject);
     })
   }
 
-  static async getStudentActivities(rollNumber: string, programId: number, semesterName: string, campusCode: string = this.currentCampus) {
+  static async getStudentActivities(rollNumber: string, programId: string, semesterName: string, campusCode: string = this.currentCampus) {
     console.log(rollNumber, programId, semesterName, campusCode);
     return new Promise((resolve, reject) => {
       this.sendRequest("GetActivityStudent", {
@@ -85,7 +88,7 @@ class ApiService {
   // static async getPrograms()
 
   static async getSemesters(campusCode: string = this.currentCampus) {
-    return new Promise((resolve, reject) => {
+    return new Promise<ISemester[]>((resolve, reject) => {
       this.sendRequest("GetSemester", {
         campusCode: campusCode
       }).then(resolve).catch(reject);

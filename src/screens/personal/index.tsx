@@ -9,6 +9,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import UserAvatar from "@components/user-avatar";
 import AuthService from "../../services/AuthService";
 import { setAuthModalShown } from "@redux/reducers/app.reducer";
+import { signOut } from "@redux/reducers/auth.reducer";
 
 const PersonalScreen = () => {
   const dispatch = useDispatch();
@@ -145,9 +146,7 @@ const PersonalScreen = () => {
         <TouchableOpacity
           style={{padding: 30}}
           onPress={() => {
-            AuthService.signOut().then(() => {
-              dispatch(setAuthModalShown(true));
-            });
+            dispatch(signOut());
           }}
         >
           <Text>
