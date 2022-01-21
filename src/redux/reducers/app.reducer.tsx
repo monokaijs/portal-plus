@@ -13,25 +13,18 @@ export const loadAppData = createAsyncThunk("app/loadAppData", async (_, thunkAP
   const loginData = await AuthService.getLoginData();
   const userInfo = await AuthService.getUserInfo();
   const currentProgram = await getData("currentProgram", {
-    id: '-1',
-    name: ''
+    id: "-1",
+    name: "",
   }) as IAppProgram;
-  let allSemesters = [] as ISemester[];
-  let currentSemester = {} as ISemester;
   if (isLoggedIn) {
     ApiService.currentCampus = loginData.campus;
     thunkAPI.dispatch(refreshAuthData());
-    allSemesters = await getData("all-semesters", []) as ISemester[];
-    currentSemester = await getCurrentSemester();
   }
-
   return {
     isLoggedIn,
     loginData,
     userInfo,
     currentProgram,
-    allSemesters,
-    currentSemester,
   };
 });
 
@@ -57,6 +50,7 @@ const appSlice = createSlice({
   extraReducers: (builder) => {
     // Add reducers for additional action types here, and handle loading state as needed
     builder.addCase(loadAppData.fulfilled, (state, action) => {
+      console.log("App data loaded");
       state.userInfo = action.payload.userInfo;
       state.appReady = true;
     });

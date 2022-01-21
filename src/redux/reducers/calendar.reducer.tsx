@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IAppProgram, IProgram, ISemester } from "../../types";
 import { setData } from "../../services/StorageService";
 import { loadAppData } from "@redux/reducers/app.reducer";
+import { refreshAuthData } from "@redux/reducers/auth.reducer";
 
 export const setCurrentProgram = createAsyncThunk("app/saveCurrentProgram", async (currentProgram: IProgram, thunkAPI) => {
   const castedProgram : IAppProgram = {
@@ -45,6 +46,8 @@ const calendarSlice = createSlice({
     });
     builder.addCase(loadAppData.fulfilled, (state, action) => {
       state.currentProgram = action.payload.currentProgram;
+    });
+    builder.addCase(refreshAuthData.fulfilled, (state, action) => {
       state.semesters = action.payload.allSemesters;
       state.currentSemester = action.payload.currentSemester;
     });

@@ -1,8 +1,9 @@
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { IAuthenticationResponse } from "../types";
+import { IAuthenticationResponse, ISemester } from "../types";
 import ApiService from "../services/ApiService";
 import AuthService from "../services/AuthService";
-import { setData } from "../services/StorageService";
+import { getData, setData } from "../services/StorageService";
+import { getCurrentSemester } from "@utils/get-current-semester";
 
 export const signInWithGoogle = async () => {
   const selectedCampus = ApiService.currentCampus;
@@ -13,6 +14,7 @@ export const signInWithGoogle = async () => {
 
   const allSemesters = await ApiService.getSemesters();
   await setData("all-semesters", allSemesters);
+  const currentSemester = await getCurrentSemester();
 
   const rollNumber = authData.data[0].Rollnumber || "";
   const studentInfo: any = await ApiService.getStudentInfo(rollNumber, selectedCampus);
@@ -31,5 +33,6 @@ export const signInWithGoogle = async () => {
     userInfo: studentInfo,
     allSemesters,
     isLoggedIn: true,
+    currentSemester,
   };
 }

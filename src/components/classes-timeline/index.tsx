@@ -109,6 +109,7 @@ const ClassesTimeline = () => {
   };
 
   useEffect(() => {
+    console.log("app ready", app.appReady)
     if (app.appReady && auth.isLoggedIn && calendar.currentProgram.id !== '' && !calendarLoaded) {
       loadCalendar().then(() => {
 
