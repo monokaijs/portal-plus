@@ -1,12 +1,12 @@
 import HomeSVG from '@assets/icons/HomeSVG';
-import LikeSVG from '@assets/icons/LikeSVG';
 import ProfileSVG from '@assets/icons/ProfileSVG';
-import SearchSVG from '@assets/icons/SearchSVG';
+import NotificationSVG from '@assets/icons/NotificationSVG';
 import TabItem from '@components/tab-item';
 import {Colors} from '@config/styling';
 import {getSize} from '@utils';
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
+import CalendarSVG from '@assets/icons/CalendarSVG';
 
 const TabBarAnimation = ({state, descriptors, navigation}: any) => {
   return (
@@ -19,9 +19,9 @@ const TabBarAnimation = ({state, descriptors, navigation}: any) => {
           route.name === 'Home' ? (
             <HomeSVG color={Colors.primary} size={24} />
           ) : route.name === 'Calendar' ? (
-            <LikeSVG color={Colors.primary} size={24} />
+            <CalendarSVG color={Colors.primary} size={24} />
           ) : route.name === 'Notification' ? (
-            <SearchSVG color={Colors.primary} size={24} />
+            <NotificationSVG color={Colors.primary} size={24} />
           ) : (
             <ProfileSVG color={Colors.primary} size={24} />
           );
@@ -68,14 +68,14 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginHorizontal: 20,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: '#00000022',
     shadowOffset: {
       width: 0,
       height: 12,
     },
-    shadowOpacity: 0.4,
+    shadowOpacity: 0.2,
     shadowRadius: 16,
-    elevation: 24,
+    elevation: 20,
   },
   item: {
     flex: 1,
