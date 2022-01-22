@@ -37,10 +37,12 @@ const ClassesTimeline = ({viewDate}: IClassTimelineProps) => {
   }, [app, auth, calendar]);
 
   useEffect(() => {
-    const activities = allActivities.filter(act => {
-      return moment(act.Date, "l").isSame(viewDate, "day");
-    });
-    setTodayActivities(activities);
+    if (allActivities && allActivities.filter) {
+      const activities = allActivities.filter(act => {
+        return moment(act.Date, "l").isSame(viewDate, "day");
+      });
+      setTodayActivities(activities);
+    }
   }, [allActivities, viewDate]);
 
   return (

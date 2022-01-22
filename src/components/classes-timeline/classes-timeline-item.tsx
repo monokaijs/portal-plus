@@ -1,9 +1,11 @@
 import { useTheme } from "@react-navigation/native";
 import { Colors as DefaultAppColors } from "@config/styling";
-import { Linking, TouchableOpacity, View } from "react-native";
+import { Linking, ToastAndroid, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import Text from "@components/common/Text";
 import React from "react";
+import moment from "moment";
+import notifee, { TimestampTrigger, TriggerType } from "@notifee/react-native";
 
 interface IClassTimelineItemProps {
   isFirst?: boolean,
@@ -24,7 +26,41 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }: IClassTimelineIte
     } else return DefaultAppColors.failed;
   };
   return (
-    <View
+    <TouchableOpacity
+      activeOpacity={.8}
+      onPress={async () => {
+        const slotDate = moment(item.Date, "l");
+        const slotTime = item.SlotTime.split("-")[0].replace("(", "");
+        slotDate
+          .set("hour", slotTime.split(":")[0])
+          .set("minute", slotTime.split(":")[1])
+          .subtract(10, "minute")
+        ;
+        const trigger: TimestampTrigger = {
+          type: TriggerType.TIMESTAMP,
+          timestamp: slotDate.toDate().getTime(),
+        };
+        notifee.createTriggerNotification({
+          title: "Upcoming class: " + item.SubjectCode,
+          body: `You'll have a ${item.SubjectCode} class between ${slotTime.replace(":", " and ")}. The lecturer is ${item.Lecturer}.`,
+          android: {
+            channelId: "default",
+            actions: [{
+              title: "Open Meet",
+              icon: "https://cdn4.iconfinder.com/data/icons/logos-brands-in-colors/48/google-meet-64.png",
+              pressAction: {
+                id: "open-meet." + item.MeetURL,
+              },
+            }],
+          },
+        }, trigger).then(() => {
+          ToastAndroid.showWithGravity(
+            "Created scheduled alert.",
+            ToastAndroid.SHORT,
+            ToastAndroid.CENTER
+          );
+        });
+      }}
       style={{
         width: "100%",
         flexDirection: "row",
@@ -142,7 +178,7 @@ const ClassesTimelineItem = ({ isFirst, isLast, item, index }: IClassTimelineIte
       >
         <Icon name={"videocam"} size={16} color={Colors.primary} style={{ opacity: .6 }} />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 

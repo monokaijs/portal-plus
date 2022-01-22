@@ -21,7 +21,7 @@ const ContentCard = ({children}: IContentCardProps) => {
       <View style={{
         flex: 1,
         padding: 16,
-        justifyContent: "flex-end"
+        justifyContent: "center"
       }}>
         <Text type={"h3"} style={{color: "#FFFFFF", marginBottom: 2}}>
           Upcoming Alert
@@ -36,7 +36,7 @@ const ContentCard = ({children}: IContentCardProps) => {
         position: "relative",
       }}>
         <Image
-          source={require("@assets/figures/test-figure.png")}
+          source={require("@assets/figures/calendar-figure.png")}
           style={{
             width: "100%",
             height: "100%",
