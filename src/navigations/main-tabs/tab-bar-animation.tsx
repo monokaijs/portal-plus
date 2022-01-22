@@ -68,14 +68,14 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     marginHorizontal: 20,
     marginBottom: 16,
-    shadowColor: '#000',
+    shadowColor: '#00000022',
     shadowOffset: {
       width: 0,
       height: 12,
     },
-    shadowOpacity: 0.4,
+    shadowOpacity: 0.2,
     shadowRadius: 16,
-    elevation: 24,
+    elevation: 20,
   },
   item: {
     flex: 1,

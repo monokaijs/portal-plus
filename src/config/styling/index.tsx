@@ -3,7 +3,7 @@ export const Colors = {
   background: '#EFF9FF',
   blockBackground: '#FFFFFF',
   inputBackground: '#FFFFFF',
-  darkText: '#232323',
+  darkText: '#282828',
   lightText: '#878686',
   success: "#C6D57E",
   failed: "#D57E7E"

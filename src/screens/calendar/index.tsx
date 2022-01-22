@@ -5,6 +5,8 @@ import Block from '@components/common/Block';
 import Text from '@components/common/Text';
 import React, { useEffect } from "react";
 import { LogBox, ScrollView, View } from "react-native";
+import WeeklyCalendar from "@components/weekly-calendar";
+import ContentCard from "@components/content-card";
 
 const CalendarScreen = () => {
   useEffect(() => {
@@ -12,13 +14,12 @@ const CalendarScreen = () => {
   return (
     <View style={{flex: 1, paddingBottom: 60}}>
       <AppHeader />
+      <Block noMarginBottom>
+        <ContentCard/>
+      </Block>
       <ScrollView>
-        <Block noMarginBottom>
-          <AppSearch />
-        </Block>
         <Block style={{flex: 1}} noMarginTop>
-          <Text type={'h3'}>Today Classes</Text>
-          <ClassesTimeline />
+          <WeeklyCalendar/>
         </Block>
       </ScrollView>
     </View>
